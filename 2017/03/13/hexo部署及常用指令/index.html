@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>hexo部署及常用指令 | Julysandz的博客</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">hexo部署及常用指令</h1><a id="logo" href="/.">Julysandz的博客</a><p class="description">好记性不如烂笔头</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">hexo部署及常用指令</h1><div class="post-meta">Mar 13, 2017<span> | </span><span class="category"><a href="/categories/hexo/">hexo</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><h2 id="hexo部署"><a href="#hexo部署" class="headerlink" title="hexo部署"></a>hexo部署</h2><p>Hexo是一个基于Node.js的快速、简单、强大的博客框架，利用hexo可生成静态博客并托管到github上。</p>
+<h3 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h3><p>1.安装git、node.js，注意要按照自己系统来选择32位/64位版本。</p>
+<p>2.申请github账号，创建新仓库，<strong>仓库名：你的用户名.github.io</strong>，注册后会有邮箱验证，注意查收。</p>
+<h3 id="安装Hexo："><a href="#安装Hexo：" class="headerlink" title="安装Hexo："></a>安装Hexo：</h3><p>1.新建文件夹（比如E:\blog）作为博客的根目录，在git bash下进入该文件夹。</p>
+<p>2.npm install -g hexo-cli，如果官方仓库下载速度很慢，可更换国内的npm仓库：npm config set registry <a href="https://registry.npm.taobao.org。安装过程中可能会出现WARN，忽略。" target="_blank" rel="external">https://registry.npm.taobao.org。安装过程中可能会出现WARN，忽略。</a> </p>
+<p>3.初始化hexo：hexo init，一定要在第1步新建的文件夹路径下。</p>
+<p>4.安装生成器：npm install，同样可能会有WARN，无视即可。</p>
+<p>5.初步部署完成，可在本地运行博客：hexo s -g，在浏览器<strong>localhost:4000</strong>地址访问。</p>
+<h3 id="配置博客："><a href="#配置博客：" class="headerlink" title="配置博客："></a>配置博客：</h3><p>1.配置git个人信息：</p>
+<pre><code>git config --global user.name &quot;你的git用户名&quot;
+git config --global user.email &quot;邮箱地址&quot;
+</code></pre><p>如果先前已经配置好了，跳过此步。</p>
+<p>2.用你的邮箱地址生成SSH密钥：</p>
+<pre><code>ssh-keygen -t rsa -C &quot;gdutxiaoxu@163.com&quot;
+</code></pre><p>在C:\Users\Administrator.ssh下生成两个文件：id_rsa和id_rsa.pub。</p>
+<p>3.将密钥添加到ssh-agent：</p>
+<p>eval “$(ssh-agent -s)”<br>    ssh-add ~/.ssh/id_rsa</p>
+<p>4.打开id_rsa.pub，将文件里的内容复制到到github的ssh keys中。</p>
+<p>5.输入：</p>
+<pre><code>ssh -T git@github.com
+</code></pre><p>测试是否成功认证。</p>
+<p>6.安装git插件：</p>
+<pre><code>npm install hexo-deployer-git --save
+</code></pre><p>7.用notepad++或者Sublime_Text修改E:\blog中配置文件blog/_config.yml,简单配置如下：</p>
+<pre><code>title: Julysandz的博客 #博客的名称
+subtitle: 好记性不如烂笔头 #博客副标题
+description: 
+author: Julysandz #博客作者
+language: zh-CN #语言
+timezone:
+...
+theme: landscape #博客主题名称
+...
+deploy: #发布设置
+    type: git
+    repo: git@github.com:github账号名/github账号名.github.io.git #前面新建的github仓库地址
+    branch: master
+</code></pre><p>8.部署到github：</p>
+<pre><code>hexo clean #清除博客缓存，避免网页出现bug
+hexo g #生成静态网页到public文件夹下
+hexo d #部署
+</code></pre><p>部署成功后在浏览器打开：你的github用户名.github.io,就能看到你的博客了！</p>
+<h2 id="日常操作"><a href="#日常操作" class="headerlink" title="日常操作"></a>日常操作</h2><p>1.创建文章：</p>
+<pre><code>hexo new &quot;文章名称&quot;
+</code></pre><p>在/blog/source/_posts/目录下生成md文件，用编辑器打开，内容如下：</p>
+<pre><code>---
+title: #文章标题
+date: #时间，自动生成
+tags: #标签
+categories： #分类
+---
+
+摘要:
+&lt;!--more--&gt;
+正文:
+</code></pre><p>可自主添加文章标题、标签、分类、摘要等。编辑后，可通过hexo s -g在本地浏览器预览网页效果。</p>
+<p>2.更新发布博客：</p>
+<pre><code>hexo d -g
+</code></pre></div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://Julysandz7728.github.io/2017/03/13/hexo部署及常用指令/" data-id="cj095mobk0000bouieb5hsr2a" class="article-share-link">分享到</a><div class="tags"><a href="/tags/hexo/">hexo</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://Julysandz7728.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/hexo/" style="font-size: 15px;">hexo</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/03/13/hexo部署及常用指令/">hexo部署及常用指令</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Julysandz的博客.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
